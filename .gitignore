@@ -1,1 +1,6 @@
 *.html
+node_modules/
+node_modules
+*.html
+test.*
+test

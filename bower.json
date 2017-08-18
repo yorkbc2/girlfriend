@@ -1,0 +1,27 @@
+{
+  "name": "girlfriend",
+  "description": "A dom controller and UI components",
+  "main": "gf.js",
+  "authors": [
+    "alexyorke <yorkbc2@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "JS",
+    "CSS",
+    "UI",
+    "UX",
+    "Components",
+    "JQuery",
+    "GF",
+    "Girlfriend"
+  ],
+  "homepage": "https://github.com/yorkbc2/girlfriend",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

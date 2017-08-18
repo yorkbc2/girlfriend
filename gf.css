@@ -1,4 +1,4 @@
-nav#nav {
+nav[gf-nav] {
 	position: relative;
 
 	width: 100%;
@@ -11,11 +11,11 @@ nav#nav {
 
 
 
-nav#nav.underline ul li {
+nav[gf-nav].underline ul li {
 	position: relative;
 }
 
-nav#nav.underline ul li::after {
+nav[gf-nav].underline ul li::after {
 	content: "";
 	position: absolute;
 
@@ -29,21 +29,21 @@ nav#nav.underline ul li::after {
 
 }
 
-nav#nav.underline ul li:hover::after {
+nav[gf-nav].underline ul li:hover::after {
 	width: 100%;
 }
 
-nav#nav .nav-header {
+nav[gf-nav] .nav-header {
 	display: none;
 }
 
-nav#nav.adaptive-nav .nav-header {
+nav[gf-nav].adaptive-nav .nav-header {
 	display: block;
 
 	padding: 10px;
 }
 
-nav#nav .nav-header .nav-header--button {
+nav[gf-nav] .nav-header .nav-header--button {
 	position: relative;
 	width: 42px;
 	height: 42px;
@@ -59,12 +59,12 @@ nav#nav .nav-header .nav-header--button {
 
 }
 
-nav#nav .nav-header .nav-header-button:hover i {
+nav[gf-nav] .nav-header .nav-header-button:hover i {
 	background-color: #333;
 }
 
 
-nav#nav .nav-header .nav-header--button i {
+nav[gf-nav] .nav-header .nav-header--button i {
 	position: absolute;
 	width: 28px;
 	height: 3px;
@@ -76,26 +76,26 @@ nav#nav .nav-header .nav-header--button i {
 	transition: background-color .3s ease-in-out;
 }
 
-nav#nav .nav-header .nav-header--button i:nth-child(2) {
+nav[gf-nav] .nav-header .nav-header--button i:nth-child(2) {
 	top: 18px;
 }
 
-nav#nav .nav-header .nav-header--button i:last-child {
+nav[gf-nav] .nav-header .nav-header--button i:last-child {
 	top: 27px;
 }
 
-nav#nav ul {
+nav[gf-nav] ul {
 	margin: 0;
 	padding: 0 20px;
 }
 
-nav#nav ul li {
+nav[gf-nav] ul li {
 	list-style: none;
 	display: inline-block;
 	padding: 20px 15px;
 }
 
-nav#nav ul li a {
+nav[gf-nav] ul li a {
 	font-family: "Helvetica", "Arial", sans-serif;
 	font-weight: normal;
 	font-size: 13.5pt;
@@ -105,11 +105,11 @@ nav#nav ul li a {
 	transition: color .3s ease-in-out;	
 }
 
-nav#nav ul li a:hover {
+nav[gf-nav] ul li a:hover {
 	color: #333;
 }
 
-nav#nav.adaptive-nav {
+nav[gf-nav].adaptive-nav {
 	position: fixed;
 
 	top: 0;
@@ -119,7 +119,7 @@ nav#nav.adaptive-nav {
 	background-color: #fff;
 }
 
-nav#nav.adaptive-nav .nav-body {
+nav[gf-nav].adaptive-nav .nav-body {
 	position: fixed;
 	top: 64px;
 	left: -100%;
@@ -134,7 +134,7 @@ nav#nav.adaptive-nav .nav-body {
 	transition: left .5s ease-in-out;
 }
 
-nav#nav.adaptive-nav .nav-body ul {
+nav[gf-nav].adaptive-nav .nav-body ul {
 	width: 100%;
 	height: 100%;
 
@@ -142,45 +142,58 @@ nav#nav.adaptive-nav .nav-body ul {
 	padding: 0;
 }
 
-nav#nav.adaptive-nav .nav-body ul li {
+nav[gf-nav].adaptive-nav .nav-body ul li {
 	display: block;
 }
 
-nav#nav.adaptive-nav.opened-nav .nav-body {
+nav[gf-nav].adaptive-nav.opened-nav .nav-body {
 	left: 0;
 }
 
-nav#nav.adaptive-nav .nav-header .nav-header--button i {
+nav[gf-nav].adaptive-nav .nav-header .nav-header--button i {
 	transition: transform .5s ease-in-out;
 }
 
-nav#nav.adaptive-nav.opened-nav .nav-header .nav-header--button i:first-child{
+nav[gf-nav].adaptive-nav.opened-nav .nav-header .nav-header--button i:first-child{
 	top: 45%;
 
 	transform: rotate(45deg);
 }
 
-nav#nav.adaptive-nav.opened-nav .nav-header .nav-header--button i:last-child{
+nav[gf-nav].adaptive-nav.opened-nav .nav-header .nav-header--button i:last-child{
 	top: 45%;
 
 	transform: rotate(-45deg);
 }
 
-nav#nav.adaptive-nav.opened-nav .nav-header .nav-header--button i:nth-child(2){
+nav[gf-nav].adaptive-nav.opened-nav .nav-header .nav-header--button i:nth-child(2){
 	opacity: 0;
 }
 
 /* FLAGS */
 
-nav#nav.non-uppercase ul li a {
+nav[gf-nav].non-uppercase ul li a {
 	text-transform: none;
 }
 
-nav#nav.lower-uppercase ul li a {
+nav[gf-nav] ul li.no-padding {
+	padding: 0;
+	line-height: 130%;
+}
+
+nav[gf-nav] ul li.no-padding a {
+	position: inherit;
+}
+
+nav[gf-nav] ul li.no-padding a img {
+	padding-top: 20px;
+}
+
+nav[gf-nav].lower-uppercase ul li a {
 	text-transform: lowercase;
 }
 
-nav#nav.nav-fixed {
+nav[gf-nav].nav-fixed {
 	position: fixed;
 
 	left: 0;
@@ -189,4 +202,16 @@ nav#nav.nav-fixed {
 	background-color: #fff;
 
 	z-index: 1000;
+}
+
+nav[gf-nav].talign-center {
+	text-align: center;
+}
+
+nav[gf-nav].talign-left {
+	text-align: left;
+}
+
+nav[gf-nav].talign-right {
+	text-align: right;
 }

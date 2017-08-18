@@ -1,6 +1,17 @@
+/***
+*
+*	@params:
+*
+*		Author: Alex Yorke <yorkbc2@gmail.com>
+*		Version: 1.3
+*		Name: Girlfriend UI library
+*				
+*
+*/
+
 var GF = {
 
-	find(selector, callback) {
+	find: function(selector, callback) {
 
 		var el = document.querySelector(selector);
 
@@ -11,7 +22,7 @@ var GF = {
 		return this;
 	},
 
-	findAll(selector,callback) {
+	findAll: function(selector,callback) {
 		var el = document.querySelectorAll(selector);
 
 		if(el) {
@@ -21,7 +32,7 @@ var GF = {
 		return this;
 	},
 
-	create(elName) {
+	create: function(elName) {
 
 		var element = document.createElement(elName);
 
@@ -29,19 +40,19 @@ var GF = {
 		return element;
 	},
 
-	append(parent, child) {
+	append: function(parent, child) {
 		parent.appendChild(child);
 
 		return this;
 	},
 
-	className(element, className) {
+	className: function(element, className) {
 		element.className = className;
 
 		return this;
 	},
 
-	html(element, _html) {
+	html: function(element, _html) {
 
 		element.innerHTML = _html;
 
@@ -49,16 +60,21 @@ var GF = {
 
 	},
 
-	addClass(element, className) {
+	addClass: function(element, className) {
 
 		if(!GF.hasClass(element, className)) {
-			element.className = element.className.trim() + " " + className;
+			if(element.className == null || element.className == "") {
+				element.className = className;	
+			}
+			else {	
+				element.className = element.className.trim() + " " + className;
+			}
 		}
 
 		return this;
 	},
 
-	removeClass(element, className) {
+	removeClass: function(element, className) {
 
 		if(GF.hasClass(element, className)) {
 			var regular = new RegExp(className, "g");
@@ -69,7 +85,7 @@ var GF = {
 		return this;
 	},
 
-	hasClass(element, className) {
+	hasClass: function(element, className) {
 		var classNames = element.className,
 			regular = new RegExp(className, "g");
 
@@ -82,7 +98,7 @@ var GF = {
 
 	},
 
-	click(element, listener) {
+	click: function(element, listener) {
 
 		element.addEventListener("click", function (e) {
 			listener(e)
@@ -92,26 +108,26 @@ var GF = {
 
 	},
 
-	attr(element, attribute) {
+	attr: function(element, attribute) {
 
 		return element.getAttribute(attribute);
 
 	},
 
-	removeAttr(element, attribute) {
+	removeAttr: function(element, attribute) {
 		element.removeAttribute(attribute);
 
 		return this;
 	},
 
-	addAttr(element, attribute) {
+	addAttr: function(element, attribute) {
 
 		element.setAttribute(attribute[0], attribute[1])
 
 		return this;
 	},
 
-	addStyleSheet(selector, index) {
+	addStyleSheet: function(selector, index) {
 
 		var style = GF.create("style"),
 			styleSheet;
@@ -128,7 +144,7 @@ var GF = {
 
 	},
 
-	insertStyleSheet(selector, index) {
+	insertStyleSheet: function(selector, index) {
 
 		var style = document.head.querySelector("style[data-name="+index+"]");
 
@@ -140,7 +156,7 @@ var GF = {
 
 	},
 
-	scrollTo(element) {
+	scrollTo: function(element) {
 
 		var offset = element.offsetTop;
 
@@ -173,7 +189,7 @@ var GF = {
  
 	},
 
-	get(selector) {
+	get: function(selector) {
 		var els =  document.querySelectorAll(selector);
 
 		if(els.length > 1) {
@@ -185,10 +201,104 @@ var GF = {
 	},
 
 
-	initStyleSheets() {
+	initStyleSheets: function() {
 		GF.addStyleSheet("", GFR.styleName)
 
 		return this;
+	},
+
+	DOMController: {
+		create: function (selector) {
+
+			var element = document.querySelectorAll(selector);
+
+			if(element.length > 1) {
+
+				GF.DOMController.callForEachFunction(element, function (item, index) {
+
+					element[index].__proto__ = GF.assignProtos(item, GFMethods);
+
+
+				})
+					element.__proto__ = GF.assignProtos(element, GFMethods)
+
+				return element;
+
+			}
+			else {
+
+				element[0].__proto__ = GF.assignProtos(element[0], GFMethods);
+
+				return element[0];
+
+			}
+
+		},
+
+		callForEachFunction: function (elements, callback)  {
+			elements.forEach(function (li, index) {
+				callback(li, index);
+			})
+
+			return elements;
+		}
+	},
+
+	assignProtos: function (element, proto) {
+		var _proto = element.__proto__;
+	
+		return Object.assign(_proto, proto, {});
+	},
+
+	callFunction: function (element, callback) {
+
+		if(element.length) {
+
+			GF.DOMController.callForEachFunction(element, function (item) {
+				callback(item);
+			});
+
+		}
+		else {
+
+			callback(element)
+
+		}
+
+		return element;
+
+	},
+
+	parent: function (element) {
+		return element.parentNode;
+	}, 
+
+	addToRemoveList: function (element, date) {
+
+		var rl = GF.ev.removeList,
+			GFObject = {
+				data: element,
+				date: date
+			}
+
+		rl.push(GFObject);
+
+		return this;
+
+	},
+
+	getFromRemoveList: function (element) {
+
+		var returnedElement = GF.ev.removeList.filter(function (item) {
+			return item.data == element;
+		})[0]
+
+		return returnedElement;
+
+	},
+
+	ev: {
+		removeList: []
 	}
 
 
@@ -200,7 +310,7 @@ var GF = {
 GFR = {
 	styleName: "style-girlfriend",
 
-	makeNavigator(el) {
+	makeNavigator: function(el) {
 
 		var links = el.querySelectorAll("a");
 
@@ -213,6 +323,13 @@ GFR = {
 		for(var i = 0 ; i < links.length ; i++) {
 
 			var li = GF.create("li");
+
+			if(GF.attr(links[i], "gf-image") !== null) {
+				console.log("GF_IMAGE")
+
+				GF.addClass(li, "no-padding")
+					.removeAttr(links[i], "gf-image")
+			}
 
 			GF.append(li, links[i])
 				.append(ul, li);
@@ -237,7 +354,7 @@ GFR = {
 
 	},
 
-	adaptiveNavigator(el) {
+	adaptiveNavigator: function(el) {
 
 		window.onload = function (e) {
 			var width = window.innerWidth;
@@ -253,7 +370,7 @@ GFR = {
 
 	},
 
-	setPropsToNavigator(el, w) {
+	setPropsToNavigator: function(el, w) {
 		if(w >= 720) {
 
 			GF.removeClass(el, 'adaptive-nav')
@@ -266,7 +383,7 @@ GFR = {
 		}
 	},
 
-	onClickAction(el) {
+	onClickAction: function(el) {
 		
 		if(GF.hasClass(el, "opened-nav")) {
 			GF.removeClass(el, "opened-nav")
@@ -277,7 +394,7 @@ GFR = {
 
 	},
 
-	checkAttributes(el) {
+	checkAttributes: function(el) {
 
 		var attributes = {
 			underline: GF.attr(el, "underline"),
@@ -286,14 +403,15 @@ GFR = {
 			fixed: GF.attr(el, "fixed"),
 			align: GF.attr(el, "align"),
 			uppercase: GF.attr(el, "uppercase"),
-			barsColor: GF.attr(el, "bars-color")
+			barsColor: GF.attr(el, "bars-color"),
+			align: GF.attr(el, "align")
 		};
 
 		GFR.callAttributesActions(el, attributes)
 
 	},
 
-	callAttributesActions(el, attr) {
+	callAttributesActions: function(el, attr) {
 		var selector = "data-gf" + Date.now();
 		for(var k in attr) {
 			if(attr[k] !== null) {
@@ -349,7 +467,8 @@ GFR = {
 
 				color = GF.attr(el, "color")
 
-				GF.insertStyleSheet(`li[${selector}] a { color: ${color}!important; }`, GFR.styleName);
+				GF.insertStyleSheet("li["+selector+"] a { color: "+color+"!important; }", GFR.styleName)
+					.removeAttr(el, "color");
 
 			}
 
@@ -357,11 +476,8 @@ GFR = {
 
 				hColor = GF.attr(el, "hover-color")
 
-				GF.insertStyleSheet(`
-					li[${selector}] a:hover {
-						color: ${hColor}!important;
-					}
-				`, GFR.styleName)
+				GF.insertStyleSheet("li["+selector+"] a:hover {color: "+hColor+"!important;}", GFR.styleName)
+					.removeAttr(el, "hover-color")
 
 			}},
 
@@ -372,6 +488,8 @@ GFR = {
 			if(GF.attr(el, "uppercase") !== "") {
 
 				var at = GF.attr(el, "uppercase");
+
+				GF.removeAttr(el, "uppercase")
 
 				switch(at) {
 					case "none" :
@@ -395,32 +513,42 @@ GFR = {
 		background: function (el, selector) {
 
 			GF.addAttr(el, [selector, ""])
-				.insertStyleSheet(`
-					nav#nav[${selector}] {
-						background: ${GF.attr(el, "background")}!important;
-					}
-				`, GFR.styleName)
-				.insertStyleSheet(
-					`nav#nav[${selector}].adaptive-nav .nav-body{
-						background: ${GF.attr(el, "background")}!important;
-					}`, GFR.styleName)
+				.insertStyleSheet("nav#nav["+selector+"] {background: "+GF.attr(el, "background")+"!important;}", GFR.styleName)
+				.insertStyleSheet("nav#nav["+selector+"].adaptive-nav .nav-body{background: "+GF.attr(el, "background")+"!important;}", GFR.styleName)
 				.removeAttr(el, "background")
 
 		},
 
 		barsColor: function (el, selector) {
 
-			GF.insertStyleSheet(`
-				nav#nav[${selector}] .nav-header .nav-header--button i {
-					background-color: ${GF.attr(el, "bars-color")}!important;
-				}
-			`, GFR.styleName)
+			GF.insertStyleSheet("nav#nav["+selector+"] .nav-header .nav-header--button i {background-color: "+GF.attr(el, "bars-color")+"!important;}", GFR.styleName)
 				.removeAttr(el, "bars-color")
+
+		},
+
+		align: function (el, selector) {
+
+			var attr = GF.attr(el, "align");
+
+			GF.removeAttr(el, "align");
+
+			switch(attr) {
+				case "center" :
+					GF.addClass(el, "talign-center")
+					break;
+				case "right" :
+					GF.addClass(el, "talign-rights")
+					break;
+				case "left" :
+				default :
+					GF.addClass(el, "talign-left")
+					break;
+			}
 
 		}
 	},
 
-	initFilters(elements) {
+	initFilters: function(elements) {
 		elements.forEach(function(el) {
 			var initialBackground = "rgba(0,0,0,.5)",
 				initialMinHeight = "100%",
@@ -445,23 +573,14 @@ GFR = {
 				.removeAttr(el, "filter-static")
 				.removeAttr(el, "filter")
 				.addAttr(el, [selector, ""])
-				.insertStyleSheet(`
-					*[${selector}] {
-						width: 100%; 
-
-						position: relative;
-						background: ${initialBackground};
-
-						${heightString}: 100%;
-					}
-				`, GFR.styleName)
+				.insertStyleSheet("*["+selector+"] {width: 100%; position: relative;background: "+initialBackground+";"+heightString+": 100%;}", GFR.styleName)
 
 		});
 
 		return this;
 	},
 
-	scrollActionsCaller(elements) {
+	scrollActionsCaller: function (elements) {
 
 		elements.forEach(function (el) {
 
@@ -470,7 +589,6 @@ GFR = {
 			var scrollElement = GF.get(scrollSelector);
 
 			GF.click(el, function (ev) {
-				console.log(ev)
 				ev.preventDefault();
 
 				GF.scrollTo(scrollElement)
@@ -479,13 +597,120 @@ GFR = {
 		});
 
 	}
-}
+},
+
+
+gf = function (selector) {
+
+	return GF.DOMController.create(selector);
+
+},
+
+GFMethods = {
+
+	addClass: function(className) {
+		if(this == null) {
+			return this;
+		}
+		else {
+			GF.callFunction(this, function (self) {
+				GF.addClass(self, className)
+			})
+
+			return this;
+		}
+	},
+
+	removeClass: function(className) {
+		if(this == null) {
+			return this;
+		}
+		else {
+			GF.callFunction(this, function (self) {
+				GF.removeClass(self, className)
+			})
+
+			return this;
+		}
+	},
+
+	hasClass: function (className) {
+		if(this == null) {
+			return this;
+		}
+		else {
+			var result = false;
+
+			GF.callFunction(this, function (self ) {
+				result = GF.hasClass(self, className)
+			})
+
+			return result;
+		}
+	},
+
+	remove: function () {
+
+		if(this == null) {
+			return this;
+		}
+		else {
+			var parent = this.parentNode;
+
+			GF.addToRemoveList(this, new Date());
+
+			parent.removeChild(this);
+
+			return this;
+		}
+
+	},
+
+	destroy: function () {
+		if(this == null) {
+			return null;
+		}
+
+		else {
+
+			var parent = GF.parent(this);
+
+			parent.removeChild(this);
+
+			return this;
+
+		}
+	},
+
+	unremove: function() {
+		if(this == null) {
+			return this;
+		}
+		else {
+			var self = GF.getFromRemoveList(this);
+
+			return self;
+		}
+	},
+
+	// TODO show (timeout)
+
+	// TODO attr (timeout)
+
+	// TODO
+	expand: function(functionByUser) {
+		if(!functionByUser["name"]) {
+			
+		}
+	}
+
+};
 
 
 
 
 
 GF.initStyleSheets()
-	.find("nav#nav", GFR.makeNavigator)
 	.findAll("*[gf-filter]", GFR.initFilters)
-	.findAll("*[gf-scroll]", GFR.scrollActionsCaller);
+	.findAll("*[gf-scroll]", GFR.scrollActionsCaller)
+	.find("nav[gf-nav]", GFR.makeNavigator);
