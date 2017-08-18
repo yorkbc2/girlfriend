@@ -215,3 +215,30 @@ nav[gf-nav].talign-left {
 nav[gf-nav].talign-right {
 	text-align: right;
 }
+
+*[gf-columns] {
+
+	display: flex;
+
+	flex-direction: row;
+	flex-wrap: nowrap;
+
+}
+
+*[gf-columns] div {
+
+	flex: 1;
+
+}
+
+*[gf-columns] div.big-flex {
+	flex: 3;
+}
+
+*[gf-columns] div.middle-flex {
+	flex: 2;
+}
+
+*[gf-columns] div.small-flex {
+	flex: 1;
+}

@@ -11,6 +11,25 @@
 
 var GF = {
 
+	config: {
+		errorPrefix: "[Girlfriend error] :: "
+	},
+
+	selfError: function (error_message) {
+		return new Error(GF.config.errorPrefix + error_message)
+	},	
+
+
+	expand: function(functionByUser) {
+		if(!functionByUser["name"]) {
+			throw GF.selfError("Expand function name is required")	
+		} else {
+			GFMethods[functionByUser["name"]] = functionByUser;
+
+			return this;
+		}
+	},
+
 	find: function(selector, callback) {
 
 		var el = document.querySelector(selector);
@@ -212,7 +231,11 @@ var GF = {
 
 			var element = document.querySelectorAll(selector);
 
-			if(element.length > 1) {
+			if(element == null) {
+				return null;
+			}
+			else {
+				if(element.length > 1) {
 
 				GF.DOMController.callForEachFunction(element, function (item, index) {
 
@@ -227,10 +250,15 @@ var GF = {
 			}
 			else {
 
+				if(!element[0]) {
+					return null;
+				}
+
 				element[0].__proto__ = GF.assignProtos(element[0], GFMethods);
 
 				return element[0];
 
+			}
 			}
 
 		},
@@ -245,6 +273,11 @@ var GF = {
 	},
 
 	assignProtos: function (element, proto) {
+		
+		if(element == null) {
+			return null;
+		}
+
 		var _proto = element.__proto__;
 	
 		return Object.assign(_proto, proto, {});
@@ -691,18 +724,13 @@ GFMethods = {
 
 			return self;
 		}
-	},
+	}
 
 	// TODO show (timeout)
 
 	// TODO attr (timeout)
 
 	// TODO
-	expand: function(functionByUser) {
-		if(!functionByUser["name"]) {
-			
-		}
-	}
 
 };
 
